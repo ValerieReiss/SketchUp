@@ -25,7 +25,6 @@ struct GameView: View {
                 .ignoresSafeArea()
                 .scaleEffect(1.1)*/
                 
-                
                 VStack{
                     topBar
                     
@@ -63,6 +62,7 @@ struct GameView: View {
                 
                 promptGroup
             }
+            .ignoresSafeArea(.container)
         }
     }
     
@@ -121,7 +121,7 @@ struct GameView: View {
     var promptGroup: some View{
         VStack{
             if matchManager.currentlyDrawing{
-                Label("Draw:", systemImage: "exclamationmark.bubble.fill")
+                Label("DRAW:", systemImage: "exclamationmark.bubble.fill")
                     .font(.title2)
                     .bold()
                     .foregroundColor(.white)
@@ -131,9 +131,46 @@ struct GameView: View {
                     .padding()
                     .foregroundColor(Color("primaryYellow"))
             } else {
-                
+                HStack{
+                    Label("GUESS THE DRAWING!", systemImage: "exclamationmark.bubble.fill")
+                        .font(.title2)
+                        .bold()
+                        .foregroundColor(Color("primaryPurple"))
+                    Spacer()
+                }
+                HStack{
+                    TextField("Type your guess", text: $drawingGuess)
+                        .padding()
+                        .background(
+                            Capsule(style: .circular)
+                                .fill(.white)
+                        )
+                        .onSubmit (makeGuess)
+                    
+                    Button{
+                        makeGuess()
+                    } label: {
+                        Image(systemName: "chevron.right.circle.fill")
+                            .renderingMode(.original)
+                            .foregroundColor(Color("primaryPurple"))
+                            .font(.system(size: 50))
+                        
+                    }
+                }
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding([.horizontal, .bottom], 10)
+        .padding(.vertical)
+        .background(
+            (matchManager.currentlyDrawing ?
+             Color(red: 0.211, green: 0.711, blue: 0.711) :
+                Color("primaryYellow")
+            )
+            .opacity(0.5)
+            .brightness(-0.2)
+            
+        )
     }
 }
 
